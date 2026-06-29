@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Agricultural with AI | Smart Farming</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:#0f172a;color:#fff;overflow-x:hidden}
+.bg-anim{position:fixed;width:100%;height:100%;top:0;left:0;z-index:-1;background:linear-gradient(45deg,#667eea,#764ba2,#f093fb,#f5576c);background-size:400% 400%;animation:gradient 15s ease infinite}
+@keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.nav{background:rgba(15,23,42,0.8);backdrop-filter:blur(20px);padding:15px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.nav span{color:#fff;padding:12px 20px;cursor:pointer;font-weight:600;display:inline-block;margin:0 5px;border-radius:30px;transition:all 0.4s;border:2px solid transparent}
+.nav span:hover,.active{background:linear-gradient(135deg,#667eea,#764ba2);transform:translateY(-3px);box-shadow:0 10px 25px rgba(102,126,234,0.5);border:2px solid rgba(255,255,255,0.3)}
+
+.box{max-width:1000px;margin:30px auto;padding:0 20px}
+.output{background:rgba(255,255,255,0.1);backdrop-filter:blur(20px);padding:40px;text-align:center;border-radius:30px;margin-bottom:25px;box-shadow:0 8px 32px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.2);animation:fadeInUp 0.6s}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.output h2{background:linear-gradient(135deg,#f093fb,#f5576c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:32px;margin-bottom:15px;font-weight:800}
+.output img{width:180px;margin:20px;filter:drop-shadow(0 10px 30px rgba(240,147,251,0.5));animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-15px) rotate(5deg)}}
+.output p{font-size:17px;line-height:1.8;color:#e2e8f0}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin:25px 0}
+.stat-card{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);padding:20px;border-radius:20px;text-align:center;border:1px solid rgba(255,255,255,0.2);transition:all 0.3s}
+.stat-card:hover{transform:translateY(-5px);box-shadow:0 15px 35px rgba(102,126,234,0.4)}
+.stat-card h3{font-size:32px;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:5px}
+.stat-card p{font-size:14px;color:#cbd5e1}
+
+.menu{display:none;background:rgba(255,255,255,0.1);backdrop-filter:blur(20px);padding:25px;border-radius:30px;box-shadow:0 8px 32px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.2)}
+.menu.show{display:block;animation:slideIn 0.5s}
+@keyframes slideIn{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+.menu h3{color:#f093fb;margin-bottom:20px;font-size:24px;font-weight:700}
+.menu li{padding:18px;list-style:none;border-radius:15px;cursor:pointer;display:flex;align-items:center;margin:10px 0;transition:all 0.4s;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+.menu li img{width:45px;margin-right:18px;filter:drop-shadow(0 5px 15px rgba(0,0,0,0.3))}
+.menu li:hover{background:linear-gradient(135deg,#667eea,#764ba2);transform:translateX(15px) scale(1.02);box-shadow:0 10px 30px rgba(102,126,234,0.6);border:1px solid rgba(255,255,255,0.3)}
+
+.foot{text-align:center;padding:30px;color:#fff;font-size:14px;background:rgba(15,23,42,0.8);backdrop-filter:blur(20px);margin-top:40px;border-radius:30px 30px 0 0;border-top:2px solid rgba(255,255,255,0.1)}
+.foot p{margin:8px 0;font-weight:500}
+.thankyou{background:linear-gradient(135deg,#667eea,#764ba2);padding:40px;margin:25px 0;border-radius:30px;text-align:center;color:#fff;box-shadow:0 15px 50px rgba(102,126,234,0.5);border:1px solid rgba(255,255,255,0.2)}
+.thankyou h3{color:#fff;font-size:26px;margin-bottom:15px;font-weight:700}
+.thankyou img{width:90px;filter:drop-shadow(0 8px 20px rgba(255,255,255,0.4));animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+
+.live-dot{display:inline-block;width:10px;height:10px;background:#10b981;border-radius:50%;margin-right:8px;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+</style>
+</head>
+<body>
+<div class="bg-anim"></div>
+
+<!-- AGRICULTURAL WITH AI SYSTEM -->
+<div id="project">
+  <div class="nav">
+    <span onclick="show('home',this)" class="active">🏠 Home</span>
+    <span onclick="show('about',this)">📖 About</span>
+    <span onclick="show('sensor',this)">📡 Live Sensor</span>
+    <span onclick="show('control',this)">🎛️ Control</span>
+    <span onclick="show('ai',this)">🤖 AI Features</span>
+    <span onclick="show('contact',this)">📞 Contact</span>
+  </div>
+
+  <div class="box">
+    <!-- MAIN OUTPUT -->
+    <div class="output" id="mainOutput">
+      <img src="https://cdn-icons-png.flaticon.com/512/1355/1355593.png" alt="AI Farming">
+      <h2>🌾 Agricultural with AI System</h2>
+      <p><span class="live-dot"></span><b>Live Status:</b> System Online | Soil: <span id="soil">45</span>% | Temp: <span id="temp">28</span>°C | Motor: <span id="motor">OFF</span></p>
+      <b>Note:</b> AI powered IoT system to monitor farm conditions and save 40% water for better crop yield.
+    </div>
+
+    <!-- LIVE STATS CARDS -->
+    <div class="stats">
+      <div class="stat-card">
+        <h3 id="water">40%</h3>
+        <p>💧 Water Saved</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="yield">25%</h3>
+        <p>📈 Yield Increase</p>
+      </div>
+      <div class="stat-card">
+        <h3>24/7</h3>
+        <p>🤖 AI Monitoring</p>
+      </div>
+      <div class="stat-card">
+        <h3>100+</h3>
+        <p>👨‍🌾 Farmers Helped</p>
+      </div>
+    </div>
+
+    <div id="home" class="menu show">
+      <h3>🏠 Smart Dashboard</h3>
+      <li onclick="updateOutput('AI Live Monitoring','https://cdn-icons-png.flaticon.com/512/9002/9002274.png','AI Real-time sensor data analysis with crop prediction graphs. Current accuracy: 95%')">
+        <img src="https://cdn-icons-png.flaticon.com/512/9002/9002274.png">📊 Live Monitoring Dashboard
+      </li>
+      <li onclick="updateOutput('AI Weather Forecast','https://cdn-icons-png.flaticon.com/512/4151/4151022.png','AI based Yavatmal 7-day forecast. Rain prediction: 70% tomorrow. Best time to irrigate: 6 AM')">
+        <img src="https://cdn-icons-png.flaticon.com/512/4151/4151022.png">🌦️ Smart Weather AI
+      </li>
+      <li onclick="updateOutput('Smart Irrigation','https://cdn-icons-png.flaticon.com/512/7285/7285112.png','AI automated watering schedule. Next irrigation: Tomorrow 6:00 AM. Water needed: 200L')">
+        <img src="https://cdn-icons-png.flaticon.com/512/7285/7285112.png">📅 AI Irrigation Schedule
+      </li>
+    </div>
+
+    <div id="about" class="menu">
+      <h3>📖 About Project</h3>
+      <li onclick="updateOutput('Project Aim','https://cdn-icons-png.flaticon.com/512/709/709612.png','Main Aim: Use AI + IoT to save 40% water & help farmers increase production by 25%. Reduce manual work.')">
+        <img src="https://cdn-icons-png.flaticon.com/512/709/709612.png">🎯 Project Mission
+      </li>
+      <li onclick="updateOutput('AI Technology Stack','https://cdn-icons-png.flaticon.com/512/8637/8637101.png','Python + TensorFlow + IoT Sensors + Solar Panel + React Dashboard + Firebase + ML Crop Prediction')">
+        <img src="https://cdn-icons-png.flaticon.com/512/8637/8637101.png">⚙️ Tech Stack: AI + IoT + Cloud
+      </li>
+      <li onclick="updateOutput('Location','https://cdn-icons-png.flaticon.com/512/3170/3170733.png','Designed for Yavatmal Region cotton & soybean farmers. Tested on 10 farms. 95% accuracy.')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3170/3170733.png">📍 Target: Yavatmal Farmers
+      </li>
+    </div>
+
+    <div id="sensor" class="menu">
+      <h3>📡 Live IoT Sensor Data</h3>
+      <li onclick="updateOutput('AI Soil Analysis','https://cdn-icons-png.flaticon.com/512/4148/4148464.png','Real-time: Soil Moisture 45% | pH: 6.5 | Nitrogen: Good | AI Status: Normal for Cotton Crop')">
+        <img src="https://cdn-icons-png.flaticon.com/512/4148/4148464.png">💧 Soil Moisture: 45% - Live
+      </li>
+      <li onclick="updateOutput('AI Temp Prediction','https://cdn-icons-png.flaticon.com/512/3222/3222800.png','Current: 28°C | AI Forecast: Next 3 days 26-30°C. No heatwave. Optimal for growth.')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3222/3222800.png">🌡️ Temperature: 28°C - AI Predicted
+      </li>
+      <li onclick="updateOutput('AI Humidity & Disease','https://cdn-icons-png.flaticon.com/512/4148/4148478.png','Humidity: 65% | AI Disease Risk: 5% Low. Leaf image analysis: Healthy. No fungal risk.')">
+        <img src="https://cdn-icons-png.flaticon.com/512/4148/4148478.png">💨 Humidity: 65% - Safe
+      </li>
+    </div>
+
+    <div id="control" class="menu">
+      <h3>🎛️ AI Smart Control</h3>
+      <li onclick="toggleMotor()">
+        <img src="https://cdn-icons-png.flaticon.com/512/9002/9002244.png">🔘 Smart Motor: <span id="motorBtn">OFF</span> - Click to Toggle
+      </li>
+      <li onclick="updateOutput('AI Auto Timer','https://cdn-icons-png.flaticon.com/512/3176/3176395.png','AI scheduled: Next irrigation Tomorrow 6:00 AM for 30 mins. Based on weather + soil + crop stage.')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3176/3176395.png">⏰ AI Auto Timer Active
+      </li>
+      <li onclick="updateOutput('AI Disease Alert System','https://cdn-icons-png.flaticon.com/512/9002/9002252.png','AI scans crop images daily. SMS alert sent if disease >80% confidence. Current: All Clear ✅')">
+        <img src="https://cdn-icons-png.flaticon.com/512/9002/9002252.png">🔔 AI Disease Alert: Active
+      </li>
+    </div>
+
+    <div id="ai" class="menu">
+      <h3>🤖 Advanced AI Features</h3>
+      <li onclick="updateOutput('AI Crop Recommendation','https://cdn-icons-png.flaticon.com/512/1355/1355593.png','Based on soil + weather, AI suggests: Cotton for Kharif, Wheat for Rabi. Expected profit: ₹80,000/acre')">
+        <img src="https://cdn-icons-png.flaticon.com/512/1355/1355593.png">🌱 AI Crop Suggestion
+      </li>
+      <li onclick="updateOutput('AI Yield Prediction','https://cdn-icons-png.flaticon.com/512/9002/9002274.png','ML Model predicts: Cotton yield 12 quintal/acre this season. 25% higher than last year.')">
+        <img src="https://cdn-icons-png.flaticon.com/512/9002/9002274.png">📈 AI Yield Prediction
+      </li>
+      <li onclick="updateOutput('AI Pest Detection','https://cdn-icons-png.flaticon.com/512/2092/2092663.png','Upload leaf photo → AI detects pest/disease in 3 sec. Accuracy: 96%. Solution: Neem spray.')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2092/2092663.png">🐛 AI Pest Detection
+      </li>
+    </div>
+
+    <div id="contact" class="menu">
+      <h3>📞 Contact & Support</h3>
+      <li onclick="updateOutput('Email Support','https://cdn-icons-png.flaticon.com/512/732/732200.png','Send queries: pooja.cse2026@gmail.com. AI Chatbot reply in 5 min, Human in 24 hours.')">
+        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png">📧 Email: pooja.cse2026@gmail.com
+      </li>
+      <li onclick="updateOutput('AI Farmer Helpline','https://cdn-icons-png.flaticon.com/512/724/724664.png','24/7 Toll-Free: 1800-123-4567. AI Bot solves 80% queries instantly. Human backup available.')">
+        <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png">📞 Helpline: 1800-123-4567
+      </li>
+      <li onclick="updateOutput('Department','https://cdn-icons-png.flaticon.com/512/2997/2997279.png','Project by Computer Engineering Department, KBP Polytechnic, Satara. Guide: Prof. XYZ')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2997/2997279.png">🏫 KBP Polytechnic, Satara
+      </li>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thankyou">
+      <img src="https://cdn-icons-png.flaticon.com/512/3159/3159454.png" alt="Thank You">
+      <h3>🙏 Thank You for Using Agricultural with AI</h3>
+      <p>Smart farming for a better tomorrow. Save water, increase production with AI & IoT.<br>
+      <b>Developed by Pooja Salekar | Computer Engineering | 2026</b></p>
+    </div>
+  </div>
+
+  <!-- UPDATED FOOTER -->
+  <div class="foot">
+    <p><b>Agricultural with AI - Smart Farming Solution</b></p>
+    <p><b>Student Name:</b> Pooja Salekar</p>
+    <p><b>Collage Name:</b> KBP Polytechnic, Satara</p>
+    <p><b>Course:</b> AI for Software Development</p>
+    <p><b>Date:</b> 29/06/2026</p>
+  </div>
+</div>
+
+<script>
+// Menu Show
+function show(id,btn){
+  document.querySelectorAll('.menu').forEach(m=>m.classList.remove('show'));
+  document.querySelectorAll('.nav span').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('show');
+  btn.classList.add('active');
+}
+
+// Update Output
+function updateOutput(title, imgUrl, desc){
+  document.getElementById("mainOutput").innerHTML = `
+    <img src="${imgUrl}" alt="${title}">
+    <h2>🌾 ${title}</h2>
+    <p>${desc}</p>
+  `;
+}
+
+// Live Sensor Simulation
+setInterval(()=>{
+  let soil = Math.floor(Math.random()*10)+40;
+  let temp = Math.floor(Math.random()*5)+26;
+  document.getElementById('soil').innerText = soil;
+  document.getElementById('temp').innerText = temp;
+},3000);
+
+// Motor Toggle
+let motorOn = false;
+function toggleMotor(){
+  motorOn = !motorOn;
+  document.getElementById('motor').innerText = motorOn ? 'ON' : 'OFF';
+  document.getElementById('motorBtn').innerText = motorOn ? 'ON' : 'OFF';
+  updateOutput('Motor Status Changed','https://cdn-icons-png.flaticon.com/512/9002/9002244.png',`Motor is now ${motorOn ? 'ON - Water flowing' : 'OFF - Water stopped'}. AI logged this action.`);
+}
+
+// Counter Animation
+function animateCounter(id,target){
+  let count=0;
+  let interval=setInterval(()=>{
+    if(count>=target){clearInterval(interval);return}
+    count++;
+    document.getElementById(id).innerText=count+'%';
+  },30);
+}
+window.onload=()=>{animateCounter('water',40);animateCounter('yield',25);}
+</script>
+
+</body>
+</html>
